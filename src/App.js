@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import './styles/style.css';
 
-export const Box = ({ id, clickHandlor }) => {
-  // const clickHandlor = (event) => {
-  //   return event;
-  // }
+export const Box = ({ id, clickHandlor, styl }) => {
   return (
-    <div id={id} className='box' style={{ zIndex: `${id}` }} onClick={clickHandlor}>{id} </div>
+    <div id={id} className='box' style={styl} onClick={clickHandlor}>{id} </div>
   );
 }
 // export default Box;
 
 function App() {
   const [boxCount, setBoxCount] = useState(0);
+  const [boxArr] = useState([]);
   const [evt, setEvt] = useState(null);
+  const [play, setPlay] = useState(false);
 
   const clickHandlor = (event) => {
-    console.log(event);
     setEvt(event);
   }
 
   const addBlockHandlor = () => {
     setBoxCount(boxCount + 1);
+    boxArr.push(boxCount + 1);
   }
+
+  const deleteBlockHandlor = () => {
+
+    evt?.target.remove();
+    setEvt(null);
+  }
+
+  console.log(boxArr);
 
   const keyPress = (event) => {
     let modifier = 5;
@@ -68,25 +75,26 @@ function App() {
       }
     }
     console.log(funObj[event.key]);
-    return funObj[event.key]();
+    return funObj[event.key] ? funObj[event.key]() : null;
   }
 
   useEffect(() => {
-    if (evt?.target) {
+    if (play && evt?.target) {
       window.addEventListener('keydown', keyPress);
-      return () => { window.removeEventListener('keydown', keyPress) };
     }
-  }, [evt]);
+    return () => { window.removeEventListener('keydown', keyPress) };
+  }, [evt, play]);
 
-  let boxes = [];
-  for (let i = 1; i <= boxCount; i++) {
-    boxes.push(<Box id={i} clickHandlor={clickHandlor} key={i} />);
-  }
+  let boxes = boxArr.map((ele) => {
+    return <Box id={ele} clickHandlor={clickHandlor} key={ele} styl={evt?.target.id == ele ? { zIndex: `${ele}`, boxShadow: '0 0 10px #68f', } : { zIndex: `${ele}` }} />
+  });
 
   return (
     <div className="App">
       <div className='side'>
+        <button onClick={() => setPlay(!play)}>{play ? 'Pause' : 'Play'}</button>
         <button className='add' onClick={addBlockHandlor}>Add Block</button>
+        <button className='delete' onClick={deleteBlockHandlor}>Delete</button>
       </div>
       <div className='container'>
         {boxes}
