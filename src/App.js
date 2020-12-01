@@ -90,16 +90,29 @@ function App() {
   });
 
   return (
-    <div className="App">
-      <div className='side'>
-        <button onClick={() => setPlay(!play)}>{play ? 'Pause' : 'Play'}</button>
-        <button className='add' onClick={addBlockHandlor}>Add Block</button>
-        <button className='delete' onClick={deleteBlockHandlor}>Delete</button>
+    <>
+
+      <div className="App">
+        <h1>Movable Box Generator</h1>
+        <div className='container'>
+          <div className='side'>
+            <div className='side__in'>
+              <button className={play ? 'pause' : 'play'} onClick={() => setPlay(!play)}>{play ? 'Pause' : 'Play'}</button>
+              <p className='desc'>Click here to <b>{play ? 'Stop' : 'Start'}</b></p>
+            </div>
+
+            <div className='side__in'>
+              <button className='add' onClick={addBlockHandlor}>Add Block</button>
+              <button className='delete' onClick={deleteBlockHandlor}>Delete</button>
+            </div>
+          </div>
+          <div className='playground'>
+            <div className='background-txt'>Playground</div>
+            {boxes}
+          </div>
+        </div>
       </div>
-      <div className='container'>
-        {boxes}
-      </div>
-    </div>
+    </>
   );
 }
 
