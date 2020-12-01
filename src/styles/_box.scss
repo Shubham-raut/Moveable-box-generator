@@ -1,0 +1,13 @@
+.box {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
