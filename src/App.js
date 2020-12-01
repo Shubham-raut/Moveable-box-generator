@@ -24,67 +24,57 @@ function App() {
     setBoxCount(boxCount + 1);
   }
 
-  useEffect(() => {
-
+  const keyPress = (event) => {
     let modifier = 5;
-    const box = evt?.target;
+    let box = evt.target;
     console.log(box);
-    if (box) {
-      console.log(box);
-      const containerHeight = box.parentElement.clientHeight;
-      const containerWidth = box.parentElement.clientWidth;
-      const maxRight = containerWidth - 100;
-      const maxBottom = containerHeight - 100;
-      const handlor = (event) => {
-        const { style } = box;
+    const { style } = box;
 
-        const topKey = () => {
-          if (parseInt(style.top ? style.top : 0) >= modifier) {
-            style.top = `${parseInt(style.top ? style.top : 0) - modifier}px`;
-          }
-          else {
-            style.top = '0px';
-          }
-        }
-        const bottomKey = () => {
-          if (parseInt(style.top ? style.top : 0) <= maxBottom - modifier) {
-            style.top = `${parseInt(style.top ? style.top : 0) + modifier}px`;
-          }
-          else {
-            style.top = `${maxBottom}px`;
-          }
-        }
-        const leftKey = () => {
-          if (parseInt(style.left ? style.left : 0) >= modifier) {
-            style.left = `${parseInt(style.left ? style.left : 0) - modifier}px`;
-          }
-          else {
-            style.left = '0px';
-          }
-        }
-        const rightKey = () => {
-          if (parseInt(style.left ? style.left : 0) <= maxRight - modifier) {
-            style.left = `${parseInt(style.left ? style.left : 0) + modifier}px`;
-          }
-          else {
-            style.left = `${maxRight}px`;
-          }
-        }
+    const maxRight = box.parentElement.clientWidth - 100;
+    const maxBottom = box.parentElement.clientHeight - 100;
 
-        switch (event.key) {
-          case 'ArrowUp': topKey();
-            break;
-          case 'ArrowDown': bottomKey();
-            break;
-          case 'ArrowLeft': leftKey();
-            break;
-          case 'ArrowRight': rightKey();
-            break;
-          default: console.log('default');
+    const funObj = {
+      ArrowUp: () => {
+        if (parseInt(style.top ? style.top : 0) >= modifier) {
+          style.top = `${parseInt(style.top ? style.top : 0) - modifier}px`;
+        }
+        else {
+          style.top = '0px';
+        }
+      },
+      ArrowDown: () => {
+        if (parseInt(style.top ? style.top : 0) <= maxBottom - modifier) {
+          style.top = `${parseInt(style.top ? style.top : 0) + modifier}px`;
+        }
+        else {
+          style.top = `${maxBottom}px`;
+        }
+      },
+      ArrowLeft: () => {
+        if (parseInt(style.left ? style.left : 0) >= modifier) {
+          style.left = `${parseInt(style.left ? style.left : 0) - modifier}px`;
+        }
+        else {
+          style.left = '0px';
+        }
+      },
+      ArrowRight: () => {
+        if (parseInt(style.left ? style.left : 0) <= maxRight - modifier) {
+          style.left = `${parseInt(style.left ? style.left : 0) + modifier}px`;
+        }
+        else {
+          style.left = `${maxRight}px`;
         }
       }
-      window.removeEventListener('keydown', handlor);
-      window.addEventListener('keydown', handlor);
+    }
+    console.log(funObj[event.key]);
+    return funObj[event.key]();
+  }
+
+  useEffect(() => {
+    if (evt?.target) {
+      window.addEventListener('keydown', keyPress);
+      return () => { window.removeEventListener('keydown', keyPress) };
     }
   }, [evt]);
 
